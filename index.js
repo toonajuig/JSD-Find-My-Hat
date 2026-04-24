@@ -83,6 +83,20 @@ class Field {
       return "out";
     }
 
+    const nextCell = this.field[row][col];
+
+    if (nextCell === hole) {
+      this.playerRow = row;
+      this.playerCol = col;
+      return "hole";
+    }
+
+    if (nextCell === hat) {
+      this.playerRow = row;
+      this.playerCol = col;
+      return "hat";
+    }
+
     this.playerRow = row;
     this.playerCol = col;
     this.field[row][col] = pathCharacter;
