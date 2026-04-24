@@ -20,8 +20,8 @@ class Field {
     //เก็บแมพนี้ไว้ใน object นี้
     this.field = field;
     // ตอนเริ่มเกม ผู้เล่นอยู่แถวที่ 0 คอลัมน์ที่ 0
-    this.playerRow = 0;
-    this.playerCol = 0;
+    this.player.Row = 0;
+    this.player.Col = 0;
   }
   //เอาแผนที่ของเกมนี้มาวนดูทีละแถวแปลงแต่ละแถวให้เป็นข้อความแล้วพิมพ์ออกมา
   print() {
