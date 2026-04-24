@@ -229,5 +229,10 @@ class Field {
 // game.print();
 
 //ลองรันเกมจริง
-const game = new Field(myField);
+// const game = new Field(myField);
+// game.play();
+
+//เกม เกมจะสุ่มแมพทุกครั้ง
+const randomField = Field.generateField(6, 8, 0.2);
+const game = new Field(randomField);
 game.play();
