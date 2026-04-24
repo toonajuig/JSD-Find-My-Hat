@@ -29,7 +29,41 @@ class Field {
       console.log(row.join(""));
     }
   }
+  // ตอนนี้สร้างแมพจัดวางposition ของPlayerไว้ที่ 0 0 แล้ว
+  //เริ่มสร้าง Method การเดิน
+  getNextPosition(direction) {
+    if (direction === "W") {
+      return {
+        row: this.playerRow - 1, //เดินขึ้นให้ row - 1
+        col: this.playerCol,
+      };
+    }
+
+    if (direction === "S") {
+      return {
+        row: this.playerRow + 1, //  เดินลงให้  row + 1
+        col: this.playerCol,
+      };
+    }
+
+    if (direction === "A") {
+      return {
+        row: this.playerRow,
+        col: this.playerCol - 1, //เดินซ้ายให้ col -1
+      };
+    }
+
+    if (direction === "D") {
+      return {
+        row: this.playerRow,
+        col: this.playerCol + 1, // เดินขวาให้ col +1
+      };
+    }
+  }
 }
 
 const game = new Field(myField);
 game.print();
+
+console.log(game.getNextPosition("D"));
+console.log(game.getNextPosition("S"));
