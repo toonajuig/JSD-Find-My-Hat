@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "chcp 65001>nul && node index.js",
+    "start:powershell": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\Run-EmojiGame.ps1",
+    "start:emoji": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\Run-EmojiGame.ps1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,5 +15,13 @@
   "type": "commonjs",
   "dependencies": {
     "prompt-sync": "^4.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toonajuig/JSD-Find-My-Hat.git"
+  },
+  "bugs": {
+    "url": "https://github.com/toonajuig/JSD-Find-My-Hat/issues"
+  },
+  "homepage": "https://github.com/toonajuig/JSD-Find-My-Hat#readme"
 }

@@ -3,8 +3,8 @@ const prompt = require("prompt-sync")({ sigint: true });
 // สร้างสัญลักษณ์ 4 ตัวของเกม
 const hat = "🎩";
 const hole = "🕳️";
-const fieldCharacter = "🌫️";
-const pathCharacter = "😘";
+const fieldCharacter = "🟩";
+const pathCharacter = "🙂";
 
 // สร้างพื้นฐานแมพก่อน
 const myField = [
@@ -19,15 +19,25 @@ class Field {
   constructor(field) {
     // เก็บแมพนี้ไว้ใน object นี้
     this.field = field;
-    // ตอนเริ่มเกม ผู้เล่นอยู่แถวที่ 0 คอลัมน์ที่ 0
+    this.rows = field.length;
+    this.columns = field[0].length;
     this.playerRow = 0;
     this.playerCol = 0;
+
+    for (let i = 0; i < this.rows; i += 1) {
+      for (let j = 0; j < this.columns; j += 1) {
+        if (field[i][j] === pathCharacter) {
+          this.playerRow = i;
+          this.playerCol = j;
+        }
+      }
+    }
   }
 
   // เอาแผนที่ของเกมนี้มาวนดูทีละแถว แล้วพิมพ์ออกมา
   print() {
     for (const row of this.field) {
-      console.log(row.join(""));
+      console.log(row.join(" "));
     }
   }
 
@@ -83,6 +93,7 @@ class Field {
       return "out";
     }
 
+    //สร้างเงื่อนไขการเดินเพิ่ม
     const nextCell = this.field[row][col];
 
     if (nextCell === hole) {
@@ -103,6 +114,96 @@ class Field {
 
     return "continue";
   }
+
+  play() {
+    while (true) {
+      console.clear();
+      this.print();
+
+      const answer = prompt("Move with W A S D: ");
+      const direction = answer.toUpperCase();
+
+      if (
+        direction !== "W" &&
+        direction !== "A" &&
+        direction !== "S" &&
+        direction !== "D"
+      ) {
+        console.log("Please type only W, A, S, or D.");
+        continue;
+      }
+
+      const result = this.move(direction);
+
+      if (result === "out") {
+        console.clear();
+        this.print();
+        console.log("You went outside the field. Game over!");
+        break;
+      }
+
+      if (result === "hole") {
+        console.clear();
+        this.print();
+        console.log("You fell into a hole. Game over!");
+        break;
+      }
+
+      if (result === "hat") {
+        console.clear();
+        this.print();
+        console.log("You found the hat. You win!");
+        break;
+      }
+    }
+
+    //สร้าง static method ทำให้เกม “สร้างแมพเอง” ได้ทุกครั้งที่รัน
+  }
+  static generateField(height, width, holePercentage = 0.2) {
+    const field = []; //สร้าง array เปล่ามารอไว้ก่อน ดี๋ยวจะค่อย ๆ เติมแถวเข้าไป
+
+    //วนสร้างทีละแถวในแต่ละแถว วนสร้างทีละช่องทุกช่องเริ่มต้นเป็นพื้นธรรมดา fieldCharacter
+    for (let row = 0; row < height; row += 1) {
+      const currentRow = [];
+
+      for (let col = 0; col < width; col += 1) {
+        currentRow.push(fieldCharacter);
+      }
+
+      field.push(currentRow);
+    }
+
+    //คือกำหนดจุดเริ่มต้นให้มุมซ้ายบน
+    field[0][0] = pathCharacter;
+
+    //สุ่มหมวก
+    let hatRow = 0;
+    let hatCol = 0;
+    // ใช้ while ไม่อยากให้หมวกไปเกิดที่ [0][0]
+    while (hatRow === 0 && hatCol === 0) {
+      hatRow = Math.floor(Math.random() * height);
+      hatCol = Math.floor(Math.random() * width);
+    }
+
+    field[hatRow][hatCol] = hat;
+
+    //สุ่มหลุม
+    const holeCount = Math.floor(height * width * holePercentage);
+    let placedHoles = 0;
+
+    while (placedHoles < holeCount) {
+      const holeRow = Math.floor(Math.random() * height);
+      const holeCol = Math.floor(Math.random() * width);
+
+      //วางหลุมได้เฉพาะช่องที่ยังเป็นพื้นธรรมดา
+      if (field[holeRow][holeCol] === fieldCharacter) {
+        field[holeRow][holeCol] = hole;
+        placedHoles += 1;
+      }
+    }
+
+    return field;
+  }
 }
 
 // log ดู position
@@ -117,12 +218,16 @@ class Field {
 // console.log(game.isOutOfBounds(2, 1)); // false ยังอยู่ในแมพ
 
 // log ทดสอบการเดินจริง
+// const game = new Field(myField);
+
+// game.print();
+
+// console.log(game.move("D"));
+// game.print();
+
+// console.log(game.move("S"));
+// game.print();
+
+//ลองรันเกมจริง
 const game = new Field(myField);
-
-game.print();
-
-console.log(game.move("D"));
-game.print();
-
-console.log(game.move("S"));
-game.print();
+game.play();
