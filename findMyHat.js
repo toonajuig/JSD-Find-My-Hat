@@ -60,6 +60,15 @@ class Field {
       };
     }
   }
+  // ทำตัวเช็คตำแหน่งว่าอยู่นอกแมพไหม
+  isOutOfBounds(row, col) {
+    return (
+      row < 0 ||
+      row >= this.field.length ||
+      col < 0 ||
+      col >= this.field[0].length
+    );
+  }
 }
 
 const game = new Field(myField);
@@ -67,3 +76,8 @@ game.print();
 
 console.log(game.getNextPosition("D"));
 console.log(game.getNextPosition("S"));
+// logทดสอบการเดินออกนอกแมพ
+console.log(game.isOutOfBounds(0, 0)); // false อยู่ในแมพ
+console.log(game.isOutOfBounds(-1, 0)); // true หลุดบน
+console.log(game.isOutOfBounds(0, 3)); // true หลุดขวา
+console.log(game.isOutOfBounds(2, 1)); // false  ยังอยู่ในแมพ
